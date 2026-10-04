@@ -1,16 +1,14 @@
 <!doctype html>
 <!--
-  Explanation sheet template (see sheet.md). Copy this file, keep the frame, the panel
-  header and the title block, and replace the panels with devices that fit your subject.
-  This file shows the OVERVIEW layout (6 equal panels). For the other layouts (mechanism,
-  frames, comparison, cause chain) see sheet-layouts.html: it uses the same CSS.
-  Example subject: HTTP caching. Every label is Polish ASD-STE100.
+  Layout reference for explanation sheets (see sheet.md, "Choose the layout").
+  Each panel shows one layout: a wireframe, the question it answers, and a small working
+  example of its device. Copy the devices from here; the CSS is the same as sheet-template.html.
 -->
 <html lang="pl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cache HTTP</title>
+<title>Układy arkusza</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -170,6 +168,11 @@ td.mono { font-family: var(--mono); font-size: 12px; }
   .field { grid-column: 1; grid-row: 1; padding: 12px; }
   .specimen { font-size: 14px; }
 }
+/* Layout wireframe next to its question (this reference sheet only). */
+.lay { display: grid; grid-template-columns: 110px 1fr; gap: 12px; align-items: center; margin-bottom: 10px; }
+.lay svg { color: var(--ink); width: 110px; }
+.lay p { margin: 0; font-size: 12.5px; }
+.stack .panel .body{padding:8px 14px}.titleblock div{padding:4px 10px}
 </style>
 </head>
 <body>
@@ -179,116 +182,113 @@ td.mono { font-family: var(--mono); font-size: 12px; }
   <div class="zones-v l" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span></div>
   <main class="field">
 
-    <!-- A: tree. Use for parts, layers, ownership, "what contains what". -->
     <section class="panel span-4">
-      <header><span class="id">A</span><h2>Gdzie leży kopia odpowiedzi</h2><small>warstwy cache</small></header>
+      <header><span class="id">A</span><h2>Przegląd</h2><small>3–6 równych paneli</small></header>
       <div class="body">
-        <div class="tree-root">Serwer<small>wysyła odpowiedź i nagłówek Cache-Control</small></div>
-        <div class="tree-kids">
-          <div class="tree-kid"><b>Cache CDN</b>
-            <ul><li>Wspólny<small>jedna kopia dla wszystkich użytkowników</small></li>
-                <li>Zapisuje tylko <code>public</code><small>albo odpowiedź bez <code>private</code></small></li></ul></div>
-          <div class="tree-kid"><b>Cache przeglądarki</b>
-            <ul><li>Prywatny<small>kopia tylko dla jednego użytkownika</small></li>
-                <li>Zapisuje też <code>private</code><small>na przykład dane konta</small></li></ul></div>
+        <div class="lay">
+          <svg viewBox="0 0 120 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="38" height="29"/><rect x="41" y="1" width="38" height="29"/><rect x="81" y="1" width="38" height="29"/><rect x="1" y="33" width="38" height="29"/><rect x="41" y="33" width="38" height="29"/><rect x="81" y="33" width="24" height="29"/><rect x="107" y="33" width="12" height="29" fill="currentColor" opacity=".25"/></g></svg>
+          <p><b>Pytanie:</b> „Czym jest X?”, „Z czego to się składa?”<br><b>Fokus:</b> brak, każdy panel ma tę samą wagę.</p>
         </div>
-      </div>
-      <p class="note">Każda warstwa sprawdza nagłówek osobno. Kopia w CDN trafia do wszystkich użytkowników.</p>
-    </section>
-
-    <!-- B: annotated specimen. Use for one real example, taken apart word by word. -->
-    <section class="panel span-5">
-      <header><span class="id">B</span><h2>Anatomia nagłówka</h2><small>przykłady z adnotacjami</small></header>
-      <div class="body">
-        <p class="label">1 Poprawny nagłówek dla pliku JS z hashem w nazwie</p>
-        <div class="specimen">
-          <span class="ann"><b>Cache-Control: </b><i>nazwa nagłówka</i></span>
-          <span class="ann"><b>public</b><i>CDN też zapisuje</i></span>
-          <span class="ann"><b>, max-age=31536000</b><i>świeża przez 1 rok</i></span>
-          <span class="ann"><b>, immutable</b><i>nie pytaj serwera</i></span>
-        </div>
-        <div class="measure">31 536 000 s = 365 dni</div>
-        <hr>
-        <p class="label">2 Błędny nagłówek dla <code>index.html</code></p>
-        <div class="specimen">
-          <span class="ann"><b>Cache-Control: </b><i>nazwa nagłówka</i></span>
-          <span class="ann bad"><b>max-age=31536000</b><i>użytkownik nie widzi zmian przez rok</i></span>
-        </div>
-        <p class="label">Poprawka: <code>Cache-Control: no-cache</code> i hash w nazwach plików JS</p>
-      </div>
-      <p class="note">Plik bez wersji w nazwie dostaje krótki czas. Plik z hashem w nazwie dostaje 1 rok.</p>
-    </section>
-
-    <!-- C: status table. Use for "allowed / not allowed", "works / breaks". -->
-    <section class="panel span-3">
-      <header><span class="id">C</span><h2>Co gdzie ustawić</h2><small>status</small></header>
-      <div class="body">
+        <p class="label">Przykład: arkusz „Cache HTTP” w sheet-template.html</p>
         <table>
-          <thead><tr><th>Plik</th><th>Nagłówek</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td class="mono">app.3f9a.js</td><td class="mono">max-age=1 rok</td><td class="ok">Dobrze</td></tr>
-            <tr><td class="mono">index.html</td><td class="mono">no-cache</td><td class="ok">Dobrze</td></tr>
-            <tr><td class="mono">index.html</td><td class="mono">max-age=1 rok</td><td class="no">Źle</td></tr>
-            <tr><td class="mono">/api/konto</td><td class="mono">public</td><td class="no">Źle</td></tr>
-            <tr><td class="mono">/api/konto</td><td class="mono">private, no-store</td><td class="ok">Dobrze</td></tr>
+            <tr><td>Panele</td><td>Drzewo, specymen, tabela, słownik, paski, oś czasu</td></tr>
+            <tr><td>Zła forma</td><td class="wrong">Ten układ dla pytania „jak to działa”</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="note"><code>public</code> przy danych konta pokazuje je innym użytkownikom.</p>
     </section>
 
-    <!-- D: dictionary. Use for terms: term, meaning, correct example, wrong example. -->
-    <section class="panel span-5">
-      <header><span class="id">D</span><h2>Słownik dyrektyw</h2><small>RFC 9111</small></header>
-      <div class="body">
-        <table>
-          <thead><tr><th>Dyrektywa</th><th>Co robi</th><th>Dobry przykład</th><th>Zły przykład</th></tr></thead>
-          <tbody>
-            <tr><td class="mono">max-age=N</td><td>Kopia jest świeża przez N sekund</td><td>Plik JS z hashem</td><td class="wrong">HTML na 1 rok</td></tr>
-            <tr><td class="mono">no-cache</td><td>Zapisz, ale zawsze pytaj serwer</td><td><code>index.html</code></td><td>—</td></tr>
-            <tr><td class="mono">no-store</td><td>Nie zapisuj nigdzie</td><td>Dane konta</td><td class="wrong">Obrazy produktu</td></tr>
-            <tr><td class="mono">private</td><td>Zapisuje tylko przeglądarka</td><td>Profil użytkownika</td><td>—</td></tr>
-            <tr><td class="mono">immutable</td><td>Nie pytaj serwera, gdy kopia jest świeża</td><td>Plik z hashem</td><td class="wrong">Plik bez wersji</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="note"><code>no-cache</code> nie znaczy „nie zapisuj”. Zakaz zapisu to <code>no-store</code>.</p>
-    </section>
-
-    <!-- E: limit bars. Use for values against a scale or a limit. -->
     <section class="panel span-4">
-      <header><span class="id">E</span><h2>Czas świeżości</h2><small>typowe wartości</small></header>
+      <header><span class="id">B</span><h2>Mechanizm</h2><small>jeden duży diagram</small></header>
       <div class="body">
-        <div class="bar"><header>HTML<b>0 s</b></header><div class="track"><div class="fill" style="width:1%"></div></div><div class="ticks"><span>0</span><span>1 h</span><span>1 dzień</span><span>1 rok</span></div></div>
-        <div class="bar"><header>Obrazy bez hasha<b>1 dzień</b></header><div class="track"><div class="fill" style="width:66%"></div></div><div class="ticks"><span>0</span><span>1 h</span><span>1 dzień</span><span>1 rok</span></div></div>
-        <div class="bar"><header>JS i CSS z hashem<b>1 rok</b></header><div class="track"><div class="fill" style="width:100%"></div></div><div class="ticks"><span>0</span><span>1 h</span><span>1 dzień</span><span>1 rok</span></div></div>
+        <div class="lay">
+          <svg viewBox="0 0 120 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="78" height="61" stroke-width="2.5"/><rect x="81" y="1" width="38" height="29"/><rect x="81" y="33" width="38" height="29"/></g></svg>
+          <p><b>Pytanie:</b> „Jak to działa?”, „Kto z kim rozmawia?”<br><b>Fokus:</b> diagram na 8–9 kolumn z 12.</p>
+        </div>
+        <p class="label">Przykład: zapytanie DNS, diagram sekwencji</p>
+        <svg viewBox="0 0 360 120" width="100%" style="font-family:var(--sans);font-size:11px">
+          <defs><marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/></marker></defs>
+          <g fill="var(--ink)" font-weight="600" text-anchor="middle"><text x="50" y="12">Przeglądarka</text><text x="180" y="12">Resolver</text><text x="310" y="12">Serwer DNS</text></g>
+          <g stroke="var(--rule)" stroke-width="1.5"><line x1="50" y1="18" x2="50" y2="118"/><line x1="180" y1="18" x2="180" y2="118"/><line x1="310" y1="18" x2="310" y2="118"/></g>
+          <g stroke="var(--ink)" stroke-width="1.4"><line x1="52" y1="38" x2="176" y2="38" marker-end="url(#m1)"/><line x1="182" y1="62" x2="306" y2="62" marker-end="url(#m1)"/><line x1="308" y1="84" x2="184" y2="84" stroke-dasharray="4 3" marker-end="url(#m1)"/><line x1="178" y1="106" x2="54" y2="106" stroke-dasharray="4 3" marker-end="url(#m1)"/></g>
+          <g fill="var(--muted)" text-anchor="middle" style="font-family:var(--mono);font-size:10px"><text x="115" y="33">example.com?</text><text x="245" y="57">example.com?</text><text x="245" y="79">93.184.215.14</text><text x="115" y="101">93.184.215.14</text></g>
+        </svg>
       </div>
-      <p class="note">Skala jest logarytmiczna. Hash w nazwie pliku pozwala na najdłuższy czas.</p>
+    </section>
+
+    <section class="panel span-4">
+      <header><span class="id">C</span><h2>Klatki</h2><small>stan po każdym kroku</small></header>
+      <div class="body">
+        <div class="lay">
+          <svg viewBox="0 0 120 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="118" height="36" stroke-width="2.5"/><line x1="30" y1="1" x2="30" y2="37"/><line x1="60" y1="1" x2="60" y2="37"/><line x1="90" y1="1" x2="90" y2="37"/><rect x="1" y="40" width="58" height="22"/><rect x="61" y="40" width="58" height="22"/></g></svg>
+          <p><b>Pytanie:</b> „Co się dzieje krok po kroku?”, „Jak to się zmienia?”<br><b>Fokus:</b> pas klatek na całą szerokość.</p>
+        </div>
+        <p class="label">Przykład: git, od zmiany do serwera</p>
+        <div class="frames" style="--n:3">
+          <div><span class="n">1 git add</span><div class="cap">Git dodaje plik do indeksu</div><span class="state">indeks: 1 plik</span></div>
+          <div><span class="n">2 git commit</span><div class="cap">Git zapisuje commit lokalnie</div><span class="state">lokalnie: a1b2c3</span></div>
+          <div><span class="n">3 git push</span><div class="cap">Git wysyła commit na serwer</div><span class="state">serwer: a1b2c3</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel span-5">
+      <header><span class="id">D</span><h2>Porównanie</h2><small>te same wiersze dla A i B</small></header>
+      <div class="body">
+        <div class="lay">
+          <svg viewBox="0 0 120 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="118" height="40" stroke-width="2.5"/><line x1="30" y1="1" x2="30" y2="41"/><line x1="75" y1="1" x2="75" y2="41"/><line x1="1" y1="11" x2="119" y2="11"/><line x1="1" y1="21" x2="119" y2="21"/><line x1="1" y1="31" x2="119" y2="31"/><rect x="1" y="44" width="78" height="18"/><rect x="81" y="44" width="38" height="18"/></g></svg>
+          <p><b>Pytanie:</b> „Czym A różni się od B?”, „Przed i po”<br><b>Fokus:</b> macierz na całą szerokość, różnice na kolor.</p>
+        </div>
+        <p class="label">Przykład: cookie i localStorage</p>
+        <div class="cmp">
+          <span class="h"></span><span class="h">Cookie</span><span class="h">localStorage</span>
+          <span class="k">Serwer widzi</span><span class="diff">Tak, w każdym zapytaniu</span><span>Nie</span>
+          <span class="k">Rozmiar</span><span>Około 4 KB</span><span class="diff">Około 5 MB</span>
+          <span class="k">Czyta JS</span><span>Tak, bez HttpOnly</span><span class="risk">Tak, zawsze</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel span-4">
+      <header><span class="id">E</span><h2>Łańcuch przyczyn</h2><small>od przyczyny do skutku</small></header>
+      <div class="body">
+        <div class="lay">
+          <svg viewBox="0 0 120 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="78" height="14" stroke-width="2.5"/><rect x="1" y="24" width="78" height="14"/><rect x="1" y="47" width="78" height="14"/><line x1="20" y1="15" x2="20" y2="24"/><line x1="20" y1="38" x2="20" y2="47"/><rect x="81" y="1" width="38" height="61"/></g></svg>
+          <p><b>Pytanie:</b> „Dlaczego?”, „Skąd ten błąd?”<br><b>Fokus:</b> łańcuch na 7–8 kolumn, poprawka obok.</p>
+        </div>
+        <p class="label">Przykład: wolna strona</p>
+        <div class="chain">
+          <div class="link root"><small>Przyczyna</small><span>Obraz ma 4 MB i brak <code>width</code></span></div>
+          <div class="by">więc</div>
+          <div class="link"><small>Potem</small><span>Przeglądarka pobiera go około 5 s</span></div>
+          <div class="by">więc</div>
+          <div class="link effect"><small>Skutek</small><span>LCP wynosi 6 s</span></div>
+        </div>
+      </div>
     </section>
 
     <div class="stack">
-      <!-- F: timeline. Use for a sequence of events or a history. -->
       <section class="panel">
-        <header><span class="id">F</span><h2>Życie jednej kopii</h2><small>max-age=600</small></header>
+        <header><span class="id">F</span><h2>Zasady</h2><small>każdy układ</small></header>
         <div class="body">
-          <div class="timeline">
-            <div><b>0</b><i></i><small>Przeglądarka pobiera plik</small></div>
-            <div><b>5 min</b><i></i><small>Kopia jest świeża. Brak zapytania</small></div>
-            <div><b>10 min</b><i></i><small>Kopia jest stara</small></div>
-            <div><b>11 min</b><i></i><small>Serwer odpowiada 304. Kopia jest znowu świeża</small></div>
-          </div>
+          <table>
+            <tbody>
+              <tr><td>Rama i tabliczka</td><td class="ok">Zawsze</td></tr>
+              <tr><td>ASD-STE100</td><td class="ok">Zawsze</td></tr>
+              <tr><td>Liczba paneli</td><td>Według treści</td></tr>
+              <tr><td>Rozmiar</td><td>Według wyjaśnienia</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
-      <!-- Title block: always last, bottom right. Fill every field with real data. -->
       <section class="titleblock">
-        <div class="t"><span>Tytuł</span><strong>Cache HTTP: przegląd</strong></div>
-        <div><span>Specyfikacja</span><strong>RFC 9111</strong></div>
-        <div><span>Właściciel</span><strong>IETF</strong></div>
-        <div><span>Dotyczy</span><strong>Przeglądarka, CDN</strong></div>
+        <div class="t"><span>Tytuł</span><strong>Układy arkusza: przegląd</strong></div>
+        <div><span>Skill</span><strong>explaining-in-asd-ste100</strong></div>
+        <div><span>Układ</span><strong>Przegląd</strong></div>
         <div><span>Data</span><strong>2026-10-04</strong></div>
         <div><span>Arkusz</span><strong>1 z 1</strong></div>
-        <div><span>Układ</span><strong>Przegląd</strong></div>
-        <div class="t"><span>Źródło</span><strong class="mono">rfc-editor.org/rfc/rfc9111</strong></div>
+        <div class="t"><span>Źródło</span><strong class="mono">sheet.md, „Choose the layout”</strong></div>
       </section>
     </div>
 

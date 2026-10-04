@@ -72,7 +72,7 @@ The explanation in ASD-STE100, within the text budget.
 
 ## Rung 2: Diagram = a sheet
 
-A sheet is one page in the style of a technical drawing, like Karpathy's ASD-STE100 overview: a frame with zones, 3–6 lettered panels, one visual device per panel, real specimens, and a title block. The reader sees the whole answer at one look. **REQUIRED:** follow [sheet.md](sheet.md) and start from [sheet-template.html](sheet-template.html).
+A sheet is one page in the style of a technical drawing, like Karpathy's ASD-STE100 overview: a frame with zones, lettered panels, real specimens, and a title block, every label in ASD-STE100. A short answer fits one screen; a longer explanation adds rows of panels below. **The layout inside the frame follows the question:** Przegląd (what is it, what parts), Mechanizm (how does it work), Klatki (what happens step by step), Porównanie (A or B), Łańcuch (why). **REQUIRED:** follow [sheet.md](sheet.md), choose the layout there first, and start from [sheet-template.html](sheet-template.html) and [sheet-layouts.html](sheet-layouts.html).
 
 An ASCII diagram in the terminal is only for a flow of at most 5 boxes inside a text answer, or when the user asks for the answer in the terminal.
 
@@ -98,5 +98,6 @@ When the subject is a diff, a PR, an audit or an agent report:
 | 400+ words of text in the terminal | A sheet, and at most 120 words next to it |
 | Text again after "nadal nie rozumiem" | One rung higher than the last explanation |
 | A long, dark landing page with prose sections | A sheet: panels, specimens, title block, one screen |
+| 6 equal panels for "jak to działa" or "dlaczego" | The layout for that question: one focal diagram, frames, a comparison or a cause chain |
 | "Dobre pytanie." as the first sentence | The answer as the first sentence |
 | A new question that points at a drawing the user did not see | The explanation first, then the question |
