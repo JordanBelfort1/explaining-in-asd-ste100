@@ -1,0 +1,260 @@
+<!doctype html>
+<!--
+  Explanation sheet template (see sheet.md). Copy this file, keep the frame, the panel
+  header and the title block, and replace the panels with devices that fit your subject.
+  Example subject: HTTP caching. Every label is Polish ASD-STE100.
+-->
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cache HTTP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #FFFFFF; --ink: #16181D; --muted: #5C6370; --rule: #C9CED6; --zebra: #F4F6F9;
+  --ok: #1D5FC2; --ok-tint: #EAF1FC; --bad: #C2231D; --bad-tint: #FCECEB;
+  --sans: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #14171C; --ink: #E8EAEE; --muted: #9AA1AD; --rule: #3A404A; --zebra: #1B1F26;
+    --ok: #7FB0FF; --ok-tint: #1A2740; --bad: #FF8A80; --bad-tint: #3A1E1E;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #14171C; --ink: #E8EAEE; --muted: #9AA1AD; --rule: #3A404A; --zebra: #1B1F26;
+  --ok: #7FB0FF; --ok-tint: #1A2740; --bad: #FF8A80; --bad-tint: #3A1E1E;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 14px/1.4 var(--sans); }
+code, .mono { font-family: var(--mono); }
+
+/* Frame: zone strips with column numbers 1-8 and row letters A-D, like a drawing sheet. */
+.sheet { max-width: 1680px; margin: 16px auto; padding: 0 16px; }
+.frame { border: 1.5px solid var(--ink); display: grid; grid-template-columns: 22px 1fr 22px; grid-template-rows: 22px 1fr 22px; }
+.zones-h { grid-column: 2; display: grid; grid-template-columns: repeat(8, 1fr); }
+.zones-h span, .zones-v span { font: 11px var(--mono); color: var(--muted); display: grid; place-items: center; }
+.zones-h span + span { border-left: 1px solid var(--ink); }
+.zones-v { display: grid; grid-template-rows: repeat(4, 1fr); }
+.zones-v span + span { border-top: 1px solid var(--ink); }
+.zones-v.l { grid-column: 1; grid-row: 2; } .zones-v.r { grid-column: 3; grid-row: 2; }
+.field { grid-column: 2; grid-row: 2; border: 1px solid var(--ink); padding: 20px;
+  display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; align-content: start; }
+
+/* Panel: letter box, title, small mono caption on the right. */
+.panel { border: 1.5px solid var(--ink); display: flex; flex-direction: column; min-width: 0; }
+.panel > header { display: flex; align-items: stretch; border-bottom: 1.5px solid var(--ink); }
+.panel > header .id { background: var(--ink); color: var(--paper); font-weight: 600; width: 32px; display: grid; place-items: center; }
+.panel > header h2 { font-size: 15px; font-weight: 600; margin: 0; padding: 7px 12px; flex: 1; }
+.panel > header small { font: 11px var(--mono); color: var(--muted); align-self: center; padding-right: 10px; }
+.panel .body { padding: 12px 14px; flex: 1; }
+.note { font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--rule); padding: 8px 14px; margin: 0; }
+.span-4 { grid-column: span 4; } .span-5 { grid-column: span 5; } .span-3 { grid-column: span 3; }
+.stack { grid-column: span 3; display: flex; flex-direction: column; gap: 20px; }
+
+/* Device: tree (hierarchy). */
+.tree-root { margin: 4px auto 0; width: max-content; border: 1.5px solid var(--ink); background: var(--ok-tint); padding: 6px 22px; text-align: center; font-weight: 600; }
+.tree-root small { display: block; font-weight: 400; color: var(--muted); }
+.tree-kids { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; position: relative; }
+.tree-kids::before { content: ""; position: absolute; top: -12px; left: 25%; right: 25%; border-top: 1px solid var(--ink); }
+.tree-kid { position: relative; }
+.tree-kid::before { content: ""; position: absolute; top: -12px; left: 50%; height: 12px; border-left: 1px solid var(--ink); }
+.tree-kid > b { display: block; border: 1.5px solid var(--ink); padding: 5px 8px; text-align: center; font-weight: 600; }
+.tree-kid ul { list-style: none; margin: 8px 0 0 10px; padding: 0; border-left: 1px solid var(--ink); }
+.tree-kid li { padding: 3px 0 3px 12px; position: relative; font-size: 13px; }
+.tree-kid li::before { content: ""; position: absolute; left: 0; top: 12px; width: 8px; border-top: 1px solid var(--ink); }
+.tree-kid li small { display: block; color: var(--muted); font-size: 11.5px; }
+
+/* Device: annotated specimen (bracket under each word, label under the bracket). */
+.specimen { font: 17px/1 var(--mono); display: flex; flex-wrap: wrap; align-items: flex-start; gap: 4px 0; margin: 6px 0 2px; }
+.ann { display: inline-flex; flex-direction: column; align-items: center; }
+.ann > i { font-style: normal; font: 11px/1.25 var(--sans); color: var(--ok); text-align: center; max-width: 18ch;
+  margin-top: 4px; padding-top: 6px; border-top: 1.5px solid currentColor; position: relative; align-self: stretch; }
+.ann > i::before, .ann > i::after { content: ""; position: absolute; top: -6px; height: 6px; border-left: 1.5px solid currentColor; }
+.ann > i::before { left: 0; } .ann > i::after { right: 0; }
+.ann.bad > b { color: var(--bad); } .ann.bad > i { color: var(--bad); }
+.ann > b { font-weight: 400; white-space: pre; }
+.label { font: 12px var(--mono); color: var(--muted); margin: 14px 0 4px; }
+.label:first-child { margin-top: 0; }
+.wrong { color: var(--bad); }
+.measure { display: flex; align-items: center; gap: 8px; font: 11px var(--mono); color: var(--muted); }
+.measure::before, .measure::after { content: ""; flex: 1; height: 7px; border-top: 1px solid var(--muted); }
+.measure::before { border-left: 1px solid var(--muted); } .measure::after { border-right: 1px solid var(--muted); }
+.panel .body hr { border: 0; border-top: 1px solid var(--rule); margin: 14px 0; }
+
+/* Device: status table and dictionary table. */
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+th { text-align: left; font: 500 11px var(--mono); color: var(--muted); padding: 4px 8px; border-bottom: 1px solid var(--rule); }
+td { padding: 6px 8px; vertical-align: top; }
+tbody tr:nth-child(odd) td { background: var(--zebra); }
+td.mono { font-family: var(--mono); font-size: 12px; }
+.ok { color: var(--ok); white-space: nowrap; } .ok::before { content: "✓ "; }
+.no { color: var(--bad); white-space: nowrap; } .no::before { content: "✗ "; }
+
+/* Device: limit bars (value against a scale). */
+.bar { margin-bottom: 12px; }
+.bar header { display: flex; justify-content: space-between; font-size: 12.5px; }
+.bar header b { font: 500 11.5px var(--mono); color: var(--ok); }
+.track { height: 12px; border: 1px solid var(--rule); margin-top: 4px; position: relative; background: var(--zebra); }
+.fill { position: absolute; inset: 0 auto 0 0; background: var(--ok-tint); border-right: 2px solid var(--ok); }
+.ticks { display: flex; justify-content: space-between; font: 10px var(--mono); color: var(--muted); margin-top: 2px; }
+
+/* Device: timeline (sequence or history). */
+.timeline { display: grid; grid-template-columns: repeat(4, 1fr); position: relative; margin: 6px 0 4px; }
+.timeline::before { content: ""; position: absolute; left: 12.5%; right: 12.5%; top: 31px; border-top: 1.5px solid var(--ink); }
+.timeline div { text-align: center; position: relative; }
+.timeline b { display: block; font-weight: 500; font-size: 15px; height: 22px; }
+.timeline i { display: block; width: 11px; height: 11px; border: 1.5px solid var(--ink); border-radius: 50%; background: var(--paper); margin: 4px auto 8px; }
+.timeline small { display: block; font-size: 11.5px; color: var(--muted); padding: 0 4px; }
+
+/* Title block. */
+.titleblock { border: 1.5px solid var(--ink); display: grid; grid-template-columns: 1fr 1fr; }
+.titleblock div { padding: 6px 10px; border-top: 1px solid var(--ink); }
+.titleblock div:nth-child(odd):not(.t) { border-left: 1px solid var(--ink); }
+.titleblock .t { grid-column: 1 / -1; border-left: 0 !important; }
+.titleblock .t:first-child { border-top: 0; }
+.titleblock .t:first-child strong { font-size: 16px; font-weight: 600; }
+.titleblock span { display: block; font: 10.5px var(--mono); color: var(--muted); }
+.titleblock strong { font-weight: 500; font-size: 13px; }
+
+@media (max-width: 1100px) {
+  .field { grid-template-columns: 1fr; }
+  .span-3, .span-4, .span-5, .stack { grid-column: auto; }
+}
+@media (max-width: 640px) {
+  .frame { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .zones-h, .zones-v { display: none; }
+  .field { grid-column: 1; grid-row: 1; padding: 12px; }
+  .specimen { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+<div class="frame">
+  <div class="zones-h" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+  <div class="zones-v l" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+  <main class="field">
+
+    <!-- A: tree. Use for parts, layers, ownership, "what contains what". -->
+    <section class="panel span-4">
+      <header><span class="id">A</span><h2>Gdzie leży kopia odpowiedzi</h2><small>warstwy cache</small></header>
+      <div class="body">
+        <div class="tree-root">Serwer<small>wysyła odpowiedź i nagłówek Cache-Control</small></div>
+        <div class="tree-kids">
+          <div class="tree-kid"><b>Cache CDN</b>
+            <ul><li>Wspólny<small>jedna kopia dla wszystkich użytkowników</small></li>
+                <li>Zapisuje tylko <code>public</code><small>albo odpowiedź bez <code>private</code></small></li></ul></div>
+          <div class="tree-kid"><b>Cache przeglądarki</b>
+            <ul><li>Prywatny<small>kopia tylko dla jednego użytkownika</small></li>
+                <li>Zapisuje też <code>private</code><small>na przykład dane konta</small></li></ul></div>
+        </div>
+      </div>
+      <p class="note">Każda warstwa sprawdza nagłówek osobno. Kopia w CDN trafia do wszystkich użytkowników.</p>
+    </section>
+
+    <!-- B: annotated specimen. Use for one real example, taken apart word by word. -->
+    <section class="panel span-5">
+      <header><span class="id">B</span><h2>Anatomia nagłówka</h2><small>przykłady z adnotacjami</small></header>
+      <div class="body">
+        <p class="label">1 Poprawny nagłówek dla pliku JS z hashem w nazwie</p>
+        <div class="specimen">
+          <span class="ann"><b>Cache-Control: </b><i>nazwa nagłówka</i></span>
+          <span class="ann"><b>public</b><i>CDN też zapisuje</i></span>
+          <span class="ann"><b>, max-age=31536000</b><i>świeża przez 1 rok</i></span>
+          <span class="ann"><b>, immutable</b><i>nie pytaj serwera</i></span>
+        </div>
+        <div class="measure">31 536 000 s = 365 dni</div>
+        <hr>
+        <p class="label">2 Błędny nagłówek dla <code>index.html</code></p>
+        <div class="specimen">
+          <span class="ann"><b>Cache-Control: </b><i>nazwa nagłówka</i></span>
+          <span class="ann bad"><b>max-age=31536000</b><i>użytkownik nie widzi zmian przez rok</i></span>
+        </div>
+        <p class="label">Poprawka: <code>Cache-Control: no-cache</code> i hash w nazwach plików JS</p>
+      </div>
+      <p class="note">Plik bez wersji w nazwie dostaje krótki czas. Plik z hashem w nazwie dostaje 1 rok.</p>
+    </section>
+
+    <!-- C: status table. Use for "allowed / not allowed", "works / breaks". -->
+    <section class="panel span-3">
+      <header><span class="id">C</span><h2>Co gdzie ustawić</h2><small>status</small></header>
+      <div class="body">
+        <table>
+          <thead><tr><th>Plik</th><th>Nagłówek</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">app.3f9a.js</td><td class="mono">max-age=1 rok</td><td class="ok">Dobrze</td></tr>
+            <tr><td class="mono">index.html</td><td class="mono">no-cache</td><td class="ok">Dobrze</td></tr>
+            <tr><td class="mono">index.html</td><td class="mono">max-age=1 rok</td><td class="no">Źle</td></tr>
+            <tr><td class="mono">/api/konto</td><td class="mono">public</td><td class="no">Źle</td></tr>
+            <tr><td class="mono">/api/konto</td><td class="mono">private, no-store</td><td class="ok">Dobrze</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note"><code>public</code> przy danych konta pokazuje je innym użytkownikom.</p>
+    </section>
+
+    <!-- D: dictionary. Use for terms: term, meaning, correct example, wrong example. -->
+    <section class="panel span-5">
+      <header><span class="id">D</span><h2>Słownik dyrektyw</h2><small>RFC 9111</small></header>
+      <div class="body">
+        <table>
+          <thead><tr><th>Dyrektywa</th><th>Co robi</th><th>Dobry przykład</th><th>Zły przykład</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">max-age=N</td><td>Kopia jest świeża przez N sekund</td><td>Plik JS z hashem</td><td class="wrong">HTML na 1 rok</td></tr>
+            <tr><td class="mono">no-cache</td><td>Zapisz, ale zawsze pytaj serwer</td><td><code>index.html</code></td><td>—</td></tr>
+            <tr><td class="mono">no-store</td><td>Nie zapisuj nigdzie</td><td>Dane konta</td><td class="wrong">Obrazy produktu</td></tr>
+            <tr><td class="mono">private</td><td>Zapisuje tylko przeglądarka</td><td>Profil użytkownika</td><td>—</td></tr>
+            <tr><td class="mono">immutable</td><td>Nie pytaj serwera, gdy kopia jest świeża</td><td>Plik z hashem</td><td class="wrong">Plik bez wersji</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note"><code>no-cache</code> nie znaczy „nie zapisuj”. Zakaz zapisu to <code>no-store</code>.</p>
+    </section>
+
+    <!-- E: limit bars. Use for values against a scale or a limit. -->
+    <section class="panel span-4">
+      <header><span class="id">E</span><h2>Czas świeżości</h2><small>typowe wartości</small></header>
+      <div class="body">
+        <div class="bar"><header>HTML<b>0 s</b></header><div class="track"><div class="fill" style="width:1%"></div></div><div class="ticks"><span>0</span><span>1 h</span><span>1 dzień</span><span>1 rok</span></div></div>
+        <div class="bar"><header>Obrazy bez hasha<b>1 dzień</b></header><div class="track"><div class="fill" style="width:66%"></div></div><div class="ticks"><span>0</span><span>1 h</span><span>1 dzień</span><span>1 rok</span></div></div>
+        <div class="bar"><header>JS i CSS z hashem<b>1 rok</b></header><div class="track"><div class="fill" style="width:100%"></div></div><div class="ticks"><span>0</span><span>1 h</span><span>1 dzień</span><span>1 rok</span></div></div>
+      </div>
+      <p class="note">Skala jest logarytmiczna. Hash w nazwie pliku pozwala na najdłuższy czas.</p>
+    </section>
+
+    <div class="stack">
+      <!-- F: timeline. Use for a sequence of events or a history. -->
+      <section class="panel">
+        <header><span class="id">F</span><h2>Życie jednej kopii</h2><small>max-age=600</small></header>
+        <div class="body">
+          <div class="timeline">
+            <div><b>0</b><i></i><small>Przeglądarka pobiera plik</small></div>
+            <div><b>5 min</b><i></i><small>Kopia jest świeża. Brak zapytania</small></div>
+            <div><b>10 min</b><i></i><small>Kopia jest stara</small></div>
+            <div><b>11 min</b><i></i><small>Serwer odpowiada 304. Kopia jest znowu świeża</small></div>
+          </div>
+        </div>
+      </section>
+      <!-- Title block: always last, bottom right. Fill every field with real data. -->
+      <section class="titleblock">
+        <div class="t"><span>Tytuł</span><strong>Cache HTTP: przegląd</strong></div>
+        <div><span>Specyfikacja</span><strong>RFC 9111</strong></div>
+        <div><span>Właściciel</span><strong>IETF</strong></div>
+        <div><span>Dotyczy</span><strong>Przeglądarka, CDN</strong></div>
+        <div><span>Data</span><strong>2026-10-04</strong></div>
+        <div><span>Arkusz</span><strong>1 z 1</strong></div>
+        <div><span>Wersja</span><strong>1</strong></div>
+        <div class="t"><span>Źródło</span><strong class="mono">rfc-editor.org/rfc/rfc9111</strong></div>
+      </section>
+    </div>
+
+  </main>
+  <div class="zones-v r" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+  <div class="zones-h" aria-hidden="true" style="grid-row:3"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+</div>
+</div>
+</body>
+</html>

@@ -21,7 +21,7 @@ Read the ElevenLabs key from `ELEVENLABS_API_KEY` in a gitignored `.env`. Never 
 
 ## Steps
 
-1. **Script.** Write the narration in STE (see SKILL.md), 60–180 s. One scene = one idea. List the scenes with the picture for each one.
+1. **Script.** Write the narration in ASD-STE100 (see SKILL.md), 60–180 s. One scene = one idea. List the scenes with the picture for each one.
 2. **Audio first.** Generate the narration for each scene and measure the durations.
 3. **Animate to the audio.** Each scene lasts as long as its narration. The picture changes when the narration names the thing.
 4. **Render** to a gitignored folder (e.g. `artifacts/video/`).
